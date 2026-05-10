@@ -1,5 +1,170 @@
-# Vue 3 + TypeScript + Vite
+# 🪪 AI 名片生成器
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+基于 AI 图像生成的在线名片制作工具，输入个人信息和风格描述，一键生成多种布局的精美名片，支持 PNG 下载。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## ✨ 功能特性
+
+- **AI 背景生成**：通过自然语言描述生成专属背景图，支持赛博朋克、国风水墨、极光梦幻等 10+ 种预设风格
+- **多布局支持**：横版左栏、横版右像、横版居中、竖版经典 4 种布局，可同时生成多种样式
+- **多 API 支持**：内置硅基流动（国内直连）、智谱 AI、Pollinations.ai 三种图像服务，可自定义接口
+- **深色/亮色文字**：一键切换名片文字颜色，适配不同背景风格
+- **高清 PNG 下载**：2x 高分辨率导出，背景图完整保留
+
+## 🖥️ 在线预览
+
+> 本地运行后访问 [http://localhost:5173](http://localhost:5173)
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Node.js >= 18
+- npm >= 9
+
+### 安装与运行
+
+```bash
+# 克隆项目
+git clone https://github.com/xugaoyang/AI-Card.git
+cd AI-Card
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+```
+
+浏览器访问 [http://localhost:5173](http://localhost:5173) 即可使用。
+
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+## 📖 使用说明
+
+### 第一步：配置 API（可选）
+
+点击右上角 ⚙️ 进入设置页，选择图像生成服务：
+
+| 服务商 | 是否免费 | 国内访问 | 说明 |
+|--------|---------|---------|------|
+| Pollinations.ai | 完全免费 | 较慢（20~40s） | 无需注册，开箱即用 |
+| **硅基流动** | 注册免费额度 | 直连，快速 | 推荐，注册即送额度 |
+| 智谱 AI | 注册免费额度 | 直连，稳定 | CogView 图像质量好 |
+| 自定义接口 | 视情况 | 视情况 | 支持任意 OpenAI 兼容接口 |
+
+**推荐使用硅基流动：**
+1. 前往 [cloud.siliconflow.cn](https://cloud.siliconflow.cn/i/free) 注册账号
+2. 在控制台创建 API Key
+3. 回到设置页选择「硅基流动」，粘贴 API Key 保存
+
+### 第二步：填写名片信息
+
+| 字段 | 是否必填 | 说明 |
+|------|---------|------|
+| 头像 | 否 | 点击圆形区域上传本地图片 |
+| 姓名 | **必填** | 显示在名片上的名字 |
+| 手机 | 否 | 手机号码 |
+| 微信 | 否 | 微信号 |
+| 地址 | 否 | 公司/个人地址 |
+
+### 第三步：选择背景风格
+
+在「背景提示词」区域描述你想要的名片背景，支持中英文。也可以点击快捷风格标签快速选择：
+
+| 风格 | 适合场景 |
+|------|---------|
+| 💼 商业简约 | 金融、咨询、法律行业 |
+| 🌑 暗夜商务 | 科技、创业、高端商务 |
+| ⚡ 赛博朋克 | 游戏、互联网、设计师 |
+| 🌸 动漫清新 | 教育、创意、年轻人 |
+| 🔥 动漫炫酷 | 电竞、潮流、娱乐 |
+| 🏯 国风水墨 | 传统文化、艺术、茶道 |
+| ✨ 奢华金箔 | 奢侈品、高端服务 |
+| 🔬 科技电路 | 硬件、AI、工程师 |
+| 🌈 极光梦幻 | 旅游、摄影、创意 |
+| 🌿 自然水彩 | 医疗健康、有机农业 |
+
+### 第四步：选择布局并生成
+
+勾选想要的名片布局（可多选），点击「生成名片」按钮，等待 AI 生成背景图。
+
+### 第五步：预览与下载
+
+- 在预览页可切换**深色/亮色**文字
+- 点击名片卡片即可下载 PNG 文件（2x 高清）
+
+## 🎯 应用场景
+
+### 个人使用
+- **自由职业者**：设计师、摄影师、程序员快速生成个性化名片
+- **求职场景**：简历面试时附带一张风格独特的名片，加深印象
+- **社交分享**：生成好看的名片图片发朋友圈、微信好友
+
+### 商业使用
+- **小微企业主**：无需设计师，5 分钟生成专业名片
+- **销售/BD**：根据拜访客户的行业风格，定制对应调性的名片
+- **活动展会**：快速制作活动专属名片，现场生成打印
+
+### 创意使用
+- **节日名片**：春节国风、情人节玫瑰等节日主题名片
+- **虚拟角色**：游戏角色、动漫人物的同人名片
+- **多语言名片**：搭配不同语言提示词生成国际化风格名片
+
+## 🛠️ 技术栈
+
+| 技术 | 说明 |
+|------|------|
+| Vue 3 + TypeScript | 前端框架 |
+| Vite | 构建工具 |
+| Pinia | 状态管理 |
+| Vue Router | 路由管理 |
+| UnoCSS | 原子化 CSS |
+| html2canvas | PNG 导出 |
+| axios | HTTP 请求 |
+
+## 📁 项目结构
+
+```
+src/
+├── api/
+│   └── aiImage.ts        # AI 图像生成接口，支持多服务商
+├── components/
+│   └── CardCanvas.vue    # 名片渲染核心组件
+├── layouts/
+│   └── index.ts          # 名片布局配置（4种布局）
+├── pages/
+│   ├── Home.vue          # 主页：信息填写与生成
+│   ├── Preview.vue       # 预览页：选择与下载
+│   └── Settings.vue      # 设置页：API 配置
+├── store/
+│   └── card.ts           # Pinia 全局状态
+└── utils/
+    └── export.ts         # PNG 导出工具
+```
+
+## 🔧 支持的 API 接口
+
+### 硅基流动（推荐）
+- Base URL：`https://api.siliconflow.cn/v1`
+- 免费模型：`Kwai-Kolors/Kolors`、`black-forest-labs/FLUX.1-schnell`
+- 注册地址：[cloud.siliconflow.cn](https://cloud.siliconflow.cn)
+
+### 智谱 AI
+- Base URL：`https://open.bigmodel.cn/api/paas/v4`
+- 免费模型：`cogview-3-flash`
+- 注册地址：[open.bigmodel.cn](https://open.bigmodel.cn)
+
+### Pollinations.ai
+- 无需 API Key，完全免费
+- 国内访问较慢，适合体验测试
+
+### 自定义 OpenAI 兼容接口
+- 支持任何兼容 OpenAI `/v1/images/generations` 格式的接口
+
+## 📄 License
+
+MIT
