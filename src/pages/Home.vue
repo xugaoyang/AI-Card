@@ -219,7 +219,7 @@ async function generate() {
     return
   }
   const provider = localStorage.getItem('ai_provider') || 'pollinations'
-  if (provider !== 'pollinations' && !localStorage.getItem('ai_api_key')) {
+  if (provider !== 'pollinations' && !localStorage.getItem('ai_api_key')?.trim()) {
     errorMsg.value = '请先在设置页配置 API Key'
     return
   }

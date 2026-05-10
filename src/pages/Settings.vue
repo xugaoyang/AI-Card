@@ -10,41 +10,34 @@
       <h2 class="card-title">选择图像生成服务</h2>
       <div class="provider-list">
         <div
+          v-for="preset in PROVIDER_PRESETS"
+          :key="preset.id"
           class="provider-item"
-          :class="{ active: provider === 'pollinations' }"
-          @click="provider = 'pollinations'"
+          :class="{ active: provider === preset.id }"
+          @click="selectPreset(preset)"
         >
           <div class="provider-header">
-            <span class="provider-name">🎨 Pollinations.ai</span>
-            <span class="badge-free">免费</span>
+            <span class="provider-name">{{ preset.name }}</span>
+            <span :class="preset.badge === 'free' ? 'badge-free' : 'badge-paid'">
+              {{ preset.badge === 'free' ? '免费' : '付费' }}
+            </span>
           </div>
-          <p class="provider-desc">完全免费，无需注册和 API Key，适合测试使用</p>
+          <p class="provider-desc">{{ preset.desc }}</p>
           <a
-            href="https://pollinations.ai"
+            v-if="preset.registerUrl"
+            :href="preset.registerUrl"
             target="_blank"
             class="provider-link"
             @click.stop
-          >pollinations.ai ↗</a>
-        </div>
-
-        <div
-          class="provider-item"
-          :class="{ active: provider === 'openai_compat' }"
-          @click="provider = 'openai_compat'"
-        >
-          <div class="provider-header">
-            <span class="provider-name">🔑 OpenAI 兼容接口</span>
-            <span class="badge-paid">需 Key</span>
-          </div>
-          <p class="provider-desc">支持 OpenAI / 智谱 / 硅基流动等兼容接口，效果更佳</p>
+          >点此注册领取免费额度 ↗</a>
         </div>
       </div>
     </div>
 
-    <!-- Pollinations 无需配置 -->
+    <!-- Pollinations 配置 -->
     <div v-if="provider === 'pollinations'" class="card">
       <div class="tip tip-green">
-        ✅ Pollinations.ai 无需任何配置，直接返回生成结果。可在下方选择图像尺寸后保存。
+        ✅ Pollinations.ai 完全免费，无需 API Key，直接使用。国内网络访问较慢，请耐心等待（约 20~40 秒）。
       </div>
       <div class="form-group">
         <label>图像尺寸</label>
@@ -56,26 +49,16 @@
         </select>
       </div>
       <button class="save-btn" @click="save">保存设置</button>
-      <div v-if="saved" class="success-msg">✅ 设置已保存</div>
+      <div v-if="saved" class="success-msg">✅ 已保存</div>
     </div>
 
-    <!-- OpenAI 兼容接口配置 -->
-    <div v-else class="card">
-      <div class="tip">
-        💡 填写兼容 OpenAI 格式的图像生成接口，支持 OpenAI、智谱、硅基流动等。
+    <!-- 硅基流动配置 -->
+    <div v-else-if="provider === 'siliconflow'" class="card">
+      <div class="tip tip-blue">
+        🚀 硅基流动国内可直连，速度快。注册后在
+        <a href="https://cloud.siliconflow.cn/account/ak" target="_blank">控制台</a>
+        创建 API Key 填入下方。免费模型每天有额度，够日常使用。
       </div>
-
-      <div class="form-group">
-        <label>API Base URL</label>
-        <input
-          v-model="baseURL"
-          type="text"
-          placeholder="https://api.openai.com"
-          class="input"
-        />
-        <span class="hint">不含路径，如 https://api.openai.com</span>
-      </div>
-
       <div class="form-group">
         <label>API Key</label>
         <div class="input-wrap">
@@ -90,7 +73,92 @@
           </button>
         </div>
       </div>
+      <div class="form-group">
+        <label>模型</label>
+        <select v-model="model" class="input">
+          <option value="Kwai-Kolors/Kolors">Kolors（免费，推荐）</option>
+          <option value="black-forest-labs/FLUX.1-schnell">FLUX.1-schnell（免费，极快）</option>
+          <option value="stabilityai/stable-diffusion-xl-base-1.0">SDXL（免费）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>图像尺寸</label>
+        <select v-model="imageSize" class="input">
+          <option value="1024x1024">1024×1024（推荐）</option>
+          <option value="960x1280">960×1280（竖版）</option>
+          <option value="768x1024">768×1024（竖版小）</option>
+          <option value="720x1280">720×1280（9:16）</option>
+        </select>
+      </div>
+      <button class="save-btn" @click="save">保存设置</button>
+      <div v-if="saved" class="success-msg">✅ 已保存</div>
+    </div>
 
+    <!-- 智谱 AI 配置 -->
+    <div v-else-if="provider === 'zhipu'" class="card">
+      <div class="tip tip-blue">
+        🧠 智谱 AI 国内直连，注册即赠免费额度。在
+        <a href="https://open.bigmodel.cn/usercenter/apikeys" target="_blank">控制台</a>
+        创建 API Key 填入下方。
+      </div>
+      <div class="form-group">
+        <label>API Key</label>
+        <div class="input-wrap">
+          <input
+            v-model="apiKey"
+            :type="showKey ? 'text' : 'password'"
+            placeholder="填入智谱 API Key"
+            class="input"
+          />
+          <button class="eye-btn" @click="showKey = !showKey">
+            {{ showKey ? '隐藏' : '显示' }}
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>模型</label>
+        <select v-model="model" class="input">
+          <option value="cogview-3-flash">CogView-3-Flash（免费额度，速度快）</option>
+          <option value="cogview-3-plus">CogView-3-Plus（付费，质量更高）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>图像尺寸</label>
+        <select v-model="imageSize" class="input">
+          <option value="1024x1024">1024×1024</option>
+        </select>
+      </div>
+      <button class="save-btn" @click="save">保存设置</button>
+      <div v-if="saved" class="success-msg">✅ 已保存</div>
+    </div>
+
+    <!-- 自定义 OpenAI 兼容接口配置 -->
+    <div v-else class="card">
+      <div class="tip">
+        💡 填写兼容 OpenAI 格式的图像生成接口，Base URL 不含路径，如 https://api.openai.com
+      </div>
+      <div class="form-group">
+        <label>API Base URL</label>
+        <input v-model="baseURL" type="text" placeholder="https://api.openai.com" class="input" />
+      </div>
+      <div class="form-group">
+        <label>API Key</label>
+        <div class="input-wrap">
+          <input
+            v-model="apiKey"
+            :type="showKey ? 'text' : 'password'"
+            placeholder="sk-..."
+            class="input"
+          />
+          <button class="eye-btn" @click="showKey = !showKey">
+            {{ showKey ? '隐藏' : '显示' }}
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>模型名称</label>
+        <input v-model="model" type="text" placeholder="dall-e-3" class="input" />
+      </div>
       <div class="form-group">
         <label>图像尺寸</label>
         <select v-model="imageSize" class="input">
@@ -99,36 +167,8 @@
           <option value="1024x1024">1024×1024（高清）</option>
         </select>
       </div>
-
       <button class="save-btn" @click="save">保存设置</button>
-      <div v-if="saved" class="success-msg">✅ 设置已保存</div>
-
-      <!-- 常用服务商参考 -->
-      <div class="ref-table">
-        <h3>常用服务商配置参考</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>服务商</th>
-              <th>Base URL</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>OpenAI</td>
-              <td>https://api.openai.com</td>
-            </tr>
-            <tr>
-              <td>智谱 AI</td>
-              <td>https://open.bigmodel.cn/api/paas/v4</td>
-            </tr>
-            <tr>
-              <td>硅基流动</td>
-              <td>https://api.siliconflow.cn/v1</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div v-if="saved" class="success-msg">✅ 已保存</div>
     </div>
   </div>
 </template>
@@ -136,12 +176,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import type { Provider } from '@/api/aiImage'
+import { PROVIDER_PRESETS } from '@/api/aiImage'
+import type { Provider, ProviderPreset } from '@/api/aiImage'
 
 const router = useRouter()
 const provider = ref<Provider>('pollinations')
 const baseURL = ref('https://api.openai.com')
 const apiKey = ref('')
+const model = ref('flux')
 const imageSize = ref('512x512')
 const showKey = ref(false)
 const saved = ref(false)
@@ -150,13 +192,22 @@ onMounted(() => {
   provider.value = (localStorage.getItem('ai_provider') as Provider) || 'pollinations'
   baseURL.value = localStorage.getItem('ai_base_url') || 'https://api.openai.com'
   apiKey.value = localStorage.getItem('ai_api_key') || ''
+  model.value = localStorage.getItem('ai_model') || 'flux'
   imageSize.value = localStorage.getItem('ai_image_size') || '512x512'
 })
+
+function selectPreset(preset: ProviderPreset) {
+  provider.value = preset.id
+  if (preset.baseURL) baseURL.value = preset.baseURL
+  model.value = preset.model
+  imageSize.value = preset.sizes[0]
+}
 
 function save() {
   localStorage.setItem('ai_provider', provider.value)
   localStorage.setItem('ai_base_url', baseURL.value.trim())
   localStorage.setItem('ai_api_key', apiKey.value.trim())
+  localStorage.setItem('ai_model', model.value.trim())
   localStorage.setItem('ai_image_size', imageSize.value)
   saved.value = true
   setTimeout(() => (saved.value = false), 2000)
@@ -191,9 +242,7 @@ function save() {
   font-weight: 600;
   transition: background 0.2s;
 }
-.back-btn:hover {
-  background: #f0f0ff;
-}
+.back-btn:hover { background: #f0f0ff; }
 
 h1 {
   font-size: 18px;
@@ -230,13 +279,8 @@ h1 {
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
-.provider-item:hover {
-  border-color: #c4c4f0;
-}
-.provider-item.active {
-  border-color: #6366f1;
-  background: #f8f8ff;
-}
+.provider-item:hover { border-color: #c4c4f0; }
+.provider-item.active { border-color: #6366f1; background: #f8f8ff; }
 
 .provider-header {
   display: flex;
@@ -279,7 +323,9 @@ h1 {
 .provider-link {
   font-size: 11px;
   color: #6366f1;
+  text-decoration: none;
 }
+.provider-link:hover { text-decoration: underline; }
 
 .tip {
   background: #f0f0ff;
@@ -290,15 +336,20 @@ h1 {
   margin-bottom: 18px;
   line-height: 1.6;
 }
+.tip a { color: #6366f1; }
 
 .tip-green {
   background: #f0fdf4;
   color: #166534;
 }
 
-.form-group {
-  margin-bottom: 18px;
+.tip-blue {
+  background: #eff6ff;
+  color: #1e40af;
 }
+.tip-blue a { color: #2563eb; }
+
+.form-group { margin-bottom: 18px; }
 
 label {
   display: block;
@@ -319,17 +370,12 @@ label {
   transition: border-color 0.2s;
   box-sizing: border-box;
   background: #fafafe;
+  font-family: inherit;
 }
-.input:focus {
-  border-color: #6366f1;
-}
+.input:focus { border-color: #6366f1; }
 
-.input-wrap {
-  position: relative;
-}
-.input-wrap .input {
-  padding-right: 60px;
-}
+.input-wrap { position: relative; }
+.input-wrap .input { padding-right: 60px; }
 .eye-btn {
   position: absolute;
   right: 12px;
@@ -340,13 +386,6 @@ label {
   cursor: pointer;
   font-size: 12px;
   color: #6366f1;
-}
-
-.hint {
-  font-size: 11px;
-  color: #aaa;
-  margin-top: 4px;
-  display: block;
 }
 
 .save-btn {
@@ -361,44 +400,12 @@ label {
   cursor: pointer;
   transition: opacity 0.2s;
 }
-.save-btn:hover {
-  opacity: 0.9;
-}
+.save-btn:hover { opacity: 0.9; }
 
 .success-msg {
   text-align: center;
   color: #22c55e;
   font-size: 14px;
   margin-top: 12px;
-}
-
-.ref-table {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #f0f0f4;
-}
-.ref-table h3 {
-  font-size: 13px;
-  font-weight: 600;
-  color: #888;
-  margin: 0 0 10px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-th {
-  text-align: left;
-  color: #888;
-  padding: 5px 6px;
-  border-bottom: 1px solid #f0f0f0;
-}
-td {
-  padding: 7px 6px;
-  border-bottom: 1px solid #f8f8f8;
-  color: #555;
-  word-break: break-all;
 }
 </style>

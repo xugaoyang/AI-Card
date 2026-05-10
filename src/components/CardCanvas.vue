@@ -18,7 +18,7 @@
       :class="{ loaded: imgLoaded }"
       alt=""
       @load="imgLoaded = true"
-      @error="imgLoaded = false"
+      @error="imgError = true"
     />
 
     <!-- 遮罩层 -->
@@ -28,7 +28,7 @@
     />
 
     <!-- 加载状态 -->
-    <div v-if="loading || (backgroundUrl && !imgLoaded && !imgError)" class="loading-layer">
+    <div v-if="loading || (backgroundUrl && !imgLoaded && !imgError && !error)" class="loading-layer">
       <div class="spinner" />
       <span>AI 生成中...</span>
     </div>
@@ -129,12 +129,20 @@ const cardEl = ref<HTMLElement | null>(null)
 const imgLoaded = ref(false)
 const imgError = ref(false)
 
-// backgroundUrl 变化时重置加载状态
+let imgTimeoutId: ReturnType<typeof setTimeout> | null = null
+
+// backgroundUrl 变化时重置加载状态，并设置超时（30秒）
 watch(
   () => props.backgroundUrl,
-  () => {
+  (url) => {
     imgLoaded.value = false
     imgError.value = false
+    if (imgTimeoutId) clearTimeout(imgTimeoutId)
+    if (url) {
+      imgTimeoutId = setTimeout(() => {
+        if (!imgLoaded.value) imgError.value = true
+      }, 30000)
+    }
   },
 )
 
