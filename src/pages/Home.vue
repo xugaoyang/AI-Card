@@ -132,16 +132,56 @@ const selectedLayouts = ref<string[]>(layouts.map((l) => l.id))
 
 // 快捷提示词预设
 const presets = [
-  { emoji: '💼', label: '商业简约', prompt: 'minimalist luxury business card background, white marble texture with gold veins, premium professional feel, no text' },
-  { emoji: '🌑', label: '暗夜商务', prompt: 'dark navy business card background, glowing gold geometric lines, luxury metallic sheen, bokeh particles, no text' },
-  { emoji: '⚡', label: '赛博朋克', prompt: 'cyberpunk business card background, neon purple and pink city at night, rain reflections, holographic glitch effects, blade runner aesthetic, no text' },
-  { emoji: '🌸', label: '动漫清新', prompt: 'soft pastel anime business card background, cherry blossom petals, dreamy pink lavender sky, Studio Ghibli inspired watercolor style, no text' },
-  { emoji: '🔥', label: '动漫炫酷', prompt: 'epic anime energy aura business card background, vivid orange red gold flames, dynamic speed lines, dragon ball super style, no text' },
-  { emoji: '🏯', label: '国风水墨', prompt: 'traditional Chinese ink wash painting business card background, misty mountains pine trees, red seal accent, Song dynasty calligraphy paper texture, no text' },
-  { emoji: '✨', label: '奢华金箔', prompt: 'ultra luxury business card background, black velvet with real gold foil texture, ornamental golden patterns, Hermès inspired premium design, no text' },
-  { emoji: '🔬', label: '科技电路', prompt: 'futuristic tech business card background, dark background with glowing blue circuit board patterns, holographic HUD interface, no text' },
-  { emoji: '🌈', label: '极光梦幻', prompt: 'aurora borealis business card background, magical northern lights in purple green blue, starry night sky, ethereal dreamy atmosphere, no text' },
-  { emoji: '🌿', label: '自然水彩', prompt: 'botanical watercolor business card background, soft green leaves white flowers, delicate hand-painted style, fresh spring nature, no text' },
+  {
+    emoji: '💼',
+    label: '商业简约',
+    prompt: 'ultra premium business card background, polished white Carrara marble surface with delicate 24K gold hairline veins, subtle depth-of-field bokeh, luxury boutique editorial photography, soft side lighting, 8K quality, no text no letters no numbers',
+  },
+  {
+    emoji: '🌑',
+    label: '暗夜商务',
+    prompt: 'sophisticated dark luxury business card background, deep space navy-black velvet surface, molten gold Art Deco geometric line patterns glowing softly, champagne micro-bokeh particles suspended in air, cinematic rim lighting, Rolls-Royce editorial quality, no text no letters',
+  },
+  {
+    emoji: '⚡',
+    label: '赛博朋克',
+    prompt: 'cyberpunk noir business card background, rain-slicked neon-lit Tokyo alley at 3AM, holographic purple and electric cyan light reflections on wet asphalt, lens flare, chromatic aberration, volumetric fog, Blade Runner 2049 cinematography, ultra-detailed, no text no letters',
+  },
+  {
+    emoji: '🌸',
+    label: '动漫清新',
+    prompt: 'ethereal pastel anime business card background, enchanted sakura forest at golden sunrise, thousands of pink cherry blossom petals floating in soft glowing morning light, watercolor wash sky in peach and lavender, Studio Ghibli hand-painted dreamscape, no text no letters',
+  },
+  {
+    emoji: '🔥',
+    label: '动漫炫酷',
+    prompt: 'explosive anime power business card background, transcendent golden sacred energy aura bursting outward, crackling white-hot lightning bolts, radial speed lines, roaring crimson flames at edges, Dragon Ball Super ultra instinct transformation, hyper-detailed shading, no text no letters',
+  },
+  {
+    emoji: '🏯',
+    label: '国风水墨',
+    prompt: 'masterpiece Chinese ink wash painting business card background, towering misty karst mountain peaks emerging from sea of clouds, ancient gnarled pine tree silhouette, distant pagoda, delicate red seal stamp accent, rice paper texture with aged patina, Song dynasty scholar aesthetic, museum archival quality, no text no letters',
+  },
+  {
+    emoji: '✨',
+    label: '奢华金箔',
+    prompt: 'ultra exclusive luxury business card background, matte obsidian black surface with hand-pressed genuine 24K gold foil abstract geometric flourishes, fine champagne gold micro-texture, deep shadows and metallic highlights, Hermès and Bottega Veneta level craftsmanship, no text no letters',
+  },
+  {
+    emoji: '🔬',
+    label: '科技电路',
+    prompt: 'futuristic quantum AI technology business card background, deep void black with luminous sapphire-blue neural network circuits pulsing with flowing data streams, holographic HUD readout rings, particle energy nodes, silicon valley hyperscaler aesthetic, no text no letters',
+  },
+  {
+    emoji: '🌈',
+    label: '极光梦幻',
+    prompt: 'transcendent aurora borealis business card background, swirling emerald jade and deep violet celestial light curtains dancing above pristine arctic snow field, star trails arcing across the Milky Way, infinite cosmos depth, ice crystal foreground bokeh, National Geographic photography, no text no letters',
+  },
+  {
+    emoji: '🌿',
+    label: '自然水彩',
+    prompt: 'exquisite botanical watercolor illustration business card background, lush tropical monstera and palm leaves in jade and emerald, white moonflower blossoms with delicate veins, fresh morning dew drops catching light, impressionist brushwork, florist atelier aesthetic, no text no letters',
+  },
 ]
 
 function triggerFileInput() {

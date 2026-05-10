@@ -83,11 +83,23 @@
             fontWeight: layout.nameStyle.fontWeight,
             color: lightText ? layout.nameStyle.lightColor : layout.nameStyle.color,
             marginBottom: layout.nameStyle.marginBottom,
-            textShadow: lightText ? '0 1px 8px rgba(0,0,0,0.6)' : '0 1px 4px rgba(0,0,0,0.08)',
+            letterSpacing: layout.nameStyle.letterSpacing ?? '0.02em',
+            textShadow: lightText
+              ? '0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5)'
+              : '0 1px 6px rgba(0,0,0,0.1)',
           }"
         >
           {{ fields.name || '您的姓名' }}
         </div>
+
+        <!-- 装饰分割线 -->
+        <div
+          class="divider"
+          :style="{
+            background: lightText ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.12)',
+            margin: layout.contentArea.textAlign === 'center' ? '0 auto 10px' : '0 0 10px',
+          }"
+        />
 
         <div
           class="info-text"
@@ -95,12 +107,19 @@
             fontSize: layout.infoStyle.fontSize,
             color: lightText ? layout.infoStyle.lightColor : layout.infoStyle.color,
             lineHeight: layout.infoStyle.lineHeight,
-            textShadow: lightText ? '0 1px 4px rgba(0,0,0,0.5)' : 'none',
+            letterSpacing: layout.infoStyle.letterSpacing ?? '0.01em',
+            textShadow: lightText ? '0 1px 6px rgba(0,0,0,0.6)' : 'none',
           }"
         >
-          <div v-if="fields.phone">📱 {{ fields.phone }}</div>
-          <div v-if="fields.wechat">💬 {{ fields.wechat }}</div>
-          <div v-if="fields.address">📍 {{ fields.address }}</div>
+          <div v-if="fields.phone" class="info-row">
+            <span class="info-icon">📱</span>{{ fields.phone }}
+          </div>
+          <div v-if="fields.wechat" class="info-row">
+            <span class="info-icon">💬</span>{{ fields.wechat }}
+          </div>
+          <div v-if="fields.address" class="info-row">
+            <span class="info-icon">📍</span>{{ fields.address }}
+          </div>
         </div>
       </div>
 
@@ -226,8 +245,8 @@ defineExpose({ cardEl })
 .avatar-wrap {
   position: absolute;
   overflow: hidden;
-  border: 3px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
   z-index: 3;
 }
 .avatar-img {
@@ -246,12 +265,32 @@ defineExpose({ cardEl })
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 }
 
-.info-text > div {
+.divider {
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.info-text {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.info-icon {
+  margin-right: 5px;
+  font-size: 0.9em;
+  flex-shrink: 0;
 }
 
 .layout-label {
@@ -259,10 +298,12 @@ defineExpose({ cardEl })
   bottom: 8px;
   right: 10px;
   font-size: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.32);
+  color: rgba(255,255,255,0.9);
   border-radius: 6px;
-  padding: 2px 7px;
+  padding: 2px 8px;
   z-index: 4;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(4px);
 }
 </style>
